@@ -77,3 +77,35 @@ class DB_config:
         db.commit()
 
         return "Values inserted to table " + INSTALLATION_TB + " for Work order ID " + workOrderID
+
+    # Get Image detials to move the image to a different bucket
+    def getImageavailabilitystatus(self, workOrderID, imageMajorIndex, tb_name):
+        self.useDB()
+        sql = '''select imageURL, imageName
+                 from %s 
+                 where workOrderID = %i AND
+                 imageMajorIndex = %i
+                ''' % (
+            tb_name,
+            int(workOrderID),
+            int(imageMajorIndex)
+        )
+        cursor.execute(sql)
+        out_put = cursor.fetchall()
+        return out_put
+
+    def UpdateImgTable(self, tb_name, workOrderID, status, score, imageName):
+        self.useDB()
+        sql = '''update %s
+                 set pre_status = '%s', score = %i
+                 where workOrderID = %i AND imageName = '%s'
+                ''' % (
+            tb_name,
+            str(status),
+            int(score),
+            int(workOrderID),
+            imageName
+        )
+        cursor.execute(sql)
+        db.commit()
+        return "Values inserted to table " + tb_name
