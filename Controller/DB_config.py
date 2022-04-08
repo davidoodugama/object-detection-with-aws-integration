@@ -59,3 +59,21 @@ class DB_config:
         cursor.execute(sql)
         out_put = cursor.fetchall()
         return out_put
+
+    # Insert value to Installation_detail
+    def insertInstallationDetailsDB(self, workOrderID, visitID, msisdn, accountID):
+        self.useDB()
+
+        sql = '''insert into %s(workOrderID, msisdn, visitID, accountId) 
+                values(%i, %i, %i, %i)
+                ''' % (
+            INSTALLATION_TB,
+            int(workOrderID),
+            int(msisdn),
+            int(visitID),
+            int(accountID))
+
+        cursor.execute(sql)
+        db.commit()
+
+        return "Values inserted to table " + INSTALLATION_TB + " for Work order ID " + workOrderID
